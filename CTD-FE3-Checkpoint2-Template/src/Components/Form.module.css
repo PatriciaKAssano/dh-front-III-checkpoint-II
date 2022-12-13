@@ -1,0 +1,31 @@
+.card{
+  width: 23rem;
+  gap: 1rem;
+  padding: 1rem;
+  margin-top: 2rem;
+  height: calc(100vh -86px);
+}
+
+.cardDark{
+  background-color: #31313196;
+}
+
+.inputSpacing+.inputSpacing{
+  margin: 1rem 0;
+}
+
+.container_input {
+  border: 1px solid #cacaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container_input input {
+  flex: 1;
+}
+
+.icon {
+  padding: 0 10px;
+  cursor: pointer;
+}
