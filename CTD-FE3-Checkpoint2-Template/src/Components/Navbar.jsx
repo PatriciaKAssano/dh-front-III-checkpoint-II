@@ -1,10 +1,8 @@
 import styles from "./Navbar.module.css";
-import ThemeContext from '../context'
 import React, {useContext} from 'react'
 
 const Navbar = () => {
 
-  const {theme, handleChangeTheme} = useContext(ThemeContext)
 
   return (
     <header className="sticky-top">
