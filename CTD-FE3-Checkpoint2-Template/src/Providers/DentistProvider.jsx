@@ -2,27 +2,23 @@ import { createContext, useEffect, useState } from "react";
 
 //import saveProduct from "../services/productService";
 
-import api from "../services/api";
+import api from "../Services/api";
 
 export const DentistContext = createContext({});
 
 const DentistProvider = ({ children }) => {
-  const [dentist, setDentist] = useState([]);
+  const [dentists, setDentists] = useState([]);
 
   const [error, setError] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
-  // async function postProduct(token, product) {
-  //   saveProduct(product, token, setError, setLoading);
-  // }
 
   async function getDentists() {
     setLoading(true);
     try {
       const response = await api.get("/dentista");
 
-      setProducts(response.data);
+      setDentists(response.data);
     } catch (error) {
       setError(true);
     } finally {
@@ -30,17 +26,18 @@ const DentistProvider = ({ children }) => {
     }
   }
 
+
   useEffect(() => {
     getDentists();
   }, []);
 
   return (
-    <ProductsContext.Provider
-      value={{ products, error, loading, getProducts /*postProduct*/ }}
+    <DentistContext.Provider
+      value={{ dentists, error, loading, getDentists /*postProduct*/ }}
     >
       {children}
-    </ProductsContext.Provider>
+    </DentistContext.Provider>
   );
 };
 
-export default ProductsProvider;
+export default DentistProvider;
