@@ -5,48 +5,96 @@ import styles from "./ScheduleForm.module.css";
 import api from "../Services/api";
 
 const ScheduleForm = () => {
+  const [dentists, setDentists] = useState([])
+  const [patients, setPatients] = useState([])
 
-  const {loginData} = useContext(AuthContext)
+  const [dentistId, setDentistId] = useState("")
+  const [patientId, setPatientId] = useState("")
 
-  const { paciente, dentista } = useContext(AuthContext);
+  const [appointmentDate, setAppointmentDate] = useState([])
+  const [token, setToken] = useState("")
+
+  // const {loginData} = useContext(AuthContext)
+
+  // const { paciente, dentista } = useContext(AuthContext);
 
   // const { contextIsLight } = useContext(NavBarContext);
 
-  const { dentists, error, setError, loading, setLoading, getDentists} = useContext(DentistContext)
+  // const { dentists, error, setError, loading, setLoading, getDentists} = useContext(DentistContext)
 
-  const [patients, setPatients] = useState([]);
-
-
-//INPUTS FORM
-  const [dentist, setDentist] = useState([]);
-  const [patient, setPatient] = useState([]);
-  const [appointmentDate, setAppointmentDate] = useState("");
+  // const [patients, setPatients] = useState([]);
 
 
-  async function getPatients() {
-    setLoading(true);
-    try {
-      const response = await api.get("/paciente", {
-        headers:{
-          token: `${loginData.tipo} ${loginData.token}`
-        }
+  //INPUTS FORM
+  // const [dentist, setDentist] = useState([]);
+  // const [patient, setPatient] = useState([]);
+  // const [appointmentDate, setAppointmentDate] = useState("");
 
-      });
 
-      setPatients(response.data);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+  // async function getPatients() {
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get("/paciente", {
+  //       headers:{
+  //         token: `${loginData.tipo} ${loginData.token}`
+  //       }
+
+  //     });
+
+  //     setPatients(response.data);
+  //   } catch (error) {
+  //     setError(true);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+
+  function getDentists() {
+    fetch(`https://dhodonto.ctdprojetos.com.br/dentista`).then(
+      response => {
+        response.json().then(
+          dentists => {
+            if (dentists === undefined) {
+              console.log("Erro")
+            } else {
+
+              setDentists([...dentists])
+            }
+          }
+        )
+      }
+    )
   }
 
+  function getPatients() {
+    return fetch(`https://dhodonto.ctdprojetos.com.br/paciente`).then(
+      response => {
+        response.json().then(
+          patients => {
+            if(patients === undefined) {
+
+              console.log("Error!")
+
+            } else {
+
+             setPatients([...patients.body])
+
+            }
+          }
+        )
+      }
+    )
+  }
+
+
   useEffect(() => {
+    setToken(localStorage.getItem('token'))
     //Nesse useEffect, você vai fazer um fetch na api buscando TODOS os dentistas
     //e pacientes e carregar os dados em 2 estados diferentes
-    getDentists();
+    getDentists()
     getPatients();
-    
+
   }, []);
 
   const handleSubmit = async (event) => {
@@ -58,33 +106,79 @@ const ScheduleForm = () => {
     //lembre-se que essa rota precisa de um Bearer Token para funcionar.
     //Lembre-se de usar um alerta para dizer se foi bem sucedido ou ocorreu um erro
 
-    const body = {
-      paciente: {
-        matricula: patient,
-      },
-      dentista: {
-        matricula: dentist,
-      },
-      dataHoraAgendamento: appointmentDate,
-    };
+    // const body = {
+    //   paciente: {
+    //     matricula: patient,
+    //   },
+    //   dentista: {
+    //     matricula: dentist,
+    //   },
+    //   dataHoraAgendamento: appointmentDate,
+    // };
 
-    const headers = {
-      headers: {
-        Authorization: `Bearer ${loginData.token}`,
-      },
-    };
+    // const headers = {
+    //   headers: {
+    //     Authorization: `Bearer ${loginData.token}`,
+    //   },
+    // };
 
-    try {
-      await api.post("/consulta", body, headers);
-      alert("OK! Marcado!");
-    } catch (error) {
-      alert("Erro " + error.response?.data || error);
+    // try {
+    //   await api.post("/consulta", body, headers);
+    //   alert("OK! Marcado!");
+    // } catch (error) {
+    //   alert("Erro " + error.response?.data || error);
+    // }
+
+    if (token === "" || token === null) {
+
+      alert("Usuário não autorizado.");
+      window.location.href = "/login"
+
+    } else if (patientId === "" || dentistId === "" || appointmentDate === "") {
+
+      alert("Um ou mais campos não preenchidos.");
+
+    } else {
+
+      const requestConfig = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          paciente: {
+            matricula: `${patientId}`,
+          },
+          dentista: {
+            matricula: `${dentistId}`,
+          },
+          dataHoraAgendamento: `${appointmentDate}`,
+        }),
+      };
+
+      fetch("https://dhodonto.ctdprojetos.com.br/consulta", requestConfig).then(
+        response => {
+          response
+            .json()
+            .then((data) => {
+              console.log(data);
+
+              alert("Consulta marcada com sucesso! Você será redirecionado para a Home.");
+
+              setTimeout(() => window.location.href = "/home", 2000);
+            })
+            .catch((e) => {
+              alert("Erro ao enviar a requisição.");
+            });
+        }
+      );
     }
 
   };
 
 
-  
+
 
   return (
     <>
@@ -100,37 +194,42 @@ const ScheduleForm = () => {
               <label htmlFor="dentist" className="form-label">
                 Dentista
               </label>
-              <select 
-                value={dentist.matricula}
-                onChange={(e) => {
-                  setDentist(e.target.value);
-                }}
-                className="form-select" 
-                name="dentist" 
+              <select
+                // value={dentist.matricula}
+                onChange={(e) => setDentistId(e.target.value)}
+                className="form-select"
+                name="dentist"
                 id="dentist">
+                <option>-- select --</option>
                 {/*Aqui deve ser feito um map para listar todos os dentistas*/}
-                {dentista.map((dentista) => (
-                  <option key={dentista.matricula} value={dentista.matricula}>
-                    {dentista.nome} {dentista.sobrenome}
+                {dentists.map((dentist) => (
+                  <option 
+                  key={dentist.matricula}
+                  value={dentist.matricula}>
+                    {dentist.nome} {dentist.sobrenome}
                   </option>
                 ))}
+
               </select>
             </div>
             <div className="col-sm-12 col-lg-6">
               <label htmlFor="patient" className="form-label">
                 Paciente
               </label>
-              <select 
-                value={patient.matricula}
-                onChange={(event) => setPatient(event.target.value)}
+              <select
+                // value={patient.matricula}
+                onChange={(event) => setPatientId(event.target.value)}
                 className="form-select" name="patient" id="patient"
               >
+                <option>-- select --</option>
                 {/*Aqui deve ser feito um map para listar todos os pacientes*/}
-                {paciente?.map((paciente) => (
-                  <option key={paciente.matricula} value={paciente.matricula}>
-                    {paciente.nome} {paciente.sobrenome}
-                  </option>
-                ))}
+                {
+                patients.map(patient => (
+                <option key={patient.matricula} value={patient.matricula}>
+                  {`${patient.nome} ${patient.sobrenome}`}
+                </option>
+                ))
+                }
               </select>
             </div>
           </div>
@@ -140,7 +239,7 @@ const ScheduleForm = () => {
                 Data
               </label>
               <input
-                value={appointmentDate}
+                // value={appointmentDate}
                 onChange={(event) => setAppointmentDate(event.target.value)}
                 className="form-control"
                 id="appointmentDate"
@@ -156,6 +255,7 @@ const ScheduleForm = () => {
               className={`btn btn-light ${styles.button
                 }`}
               type="submit"
+              onClick={handleSubmit}
             >
               Schedule
             </button>

@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
   function fillLoginDataState({ token }) {
 
     localStorage.setItem(
-      "@system_login",
+      "token",
       JSON.stringify({ token })
     );
 

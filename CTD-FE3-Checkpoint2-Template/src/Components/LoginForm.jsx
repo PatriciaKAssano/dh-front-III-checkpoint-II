@@ -16,8 +16,8 @@ const LoginForm = () => {
 
     const [isVisible, setIsVisible] = useState(false);
 
-    const [loginForm, setLoginForm] = useState("");
-    const [passwordForm, setPasswordForm] = useState("");
+    const [loginForm, setLoginForm] = useState("dentistaAdmin");
+    const [passwordForm, setPasswordForm] = useState("admin123");
     
 
     const navigate = useNavigate();
@@ -28,7 +28,31 @@ const LoginForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        auth();
+        // auth();
+
+        const requestOptions = {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              "username": loginForm,
+              "password": passwordForm
+            })
+          };
+      
+          try {
+            fetch('https://dhodonto.ctdprojetos.com.br/auth', requestOptions)
+              .then(response => response.json())
+              .then(token => localStorage.setItem('token', token.token));
+      
+            alert('logged in')
+            navigate('/home')
+          } catch (err) {
+            alert('error')
+            console.error(err)
+          }
+
+
         //Nesse handlesubmit você deverá usar o preventDefault,
         //enviar os dados do formulário e enviá-los no corpo da requisição 
         //para a rota da api que faz o login /auth

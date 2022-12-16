@@ -9,7 +9,9 @@ const Navbar = () => {
   const { theme, handleTheme } =useContext(ThemeContext)
   const { isLogged, removeLoginData } = useContext(AuthContext)
  
-
+  function handleLogout() {
+    return localStorage.getItem('token') ? localStorage.removeItem('token') : ''
+  }
 
 
   return (
@@ -55,8 +57,8 @@ const Navbar = () => {
                 ao formulário de login
                 O botão de logout deverá ser testado darkmode
                 se sim, btn-dark, se não, btn-light */}
-                <a className="nav-link" href="/login" onClick={removeLoginData}>
-                  {isLogged ? 'Logout' : 'Login' }
+                <a className="nav-link" href="/login" onClick={handleLogout}>
+                  {localStorage.getItem('token') ? 'Logout' : 'Login' }
                 </a>
               </li>
               <li className={`nav-item`}>

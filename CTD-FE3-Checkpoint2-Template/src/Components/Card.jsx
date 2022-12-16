@@ -20,7 +20,7 @@ const Card = (props) => {
         <div className={theme === "light" ? `card-body ${styles.CardBody}` : `card-body ${styles.CardDark}`}>
           {/* Na linha seguinte o link deverá utilizar a matricula, nome e sobrenome do dentista
           que vem da API */}
-          <a href={`/dentista/${dentist.matricula}`}>
+          <a href={`/dentist/${dentist.matricula}`}>
             
             <h5 className={theme === "light" ? `card-title ${styles.title}` : `card-title ${styles.titleDark}`}>{`${dentist.nome} ${dentist.sobrenome}`}</h5>
           </a>

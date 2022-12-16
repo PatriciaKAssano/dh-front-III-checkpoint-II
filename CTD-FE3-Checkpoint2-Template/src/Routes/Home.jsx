@@ -20,8 +20,8 @@ const Home = () => {
     <div className={theme === "light" ? "light" : "dark"}>
       <h1 >Home</h1>
       <div className="card-grid container">
-        {dentists.map((dentist) =>(
-          <Card dentist={dentist}/>
+        {dentists.map(dentist =>(
+          <Card key={dentist.matricula} dentist={dentist}/>
         ))}
         </div>
     </div>
