@@ -6,10 +6,13 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import api from "../Services/api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthContext";
+import { ThemeContext } from "../Providers/ThemeProvider";
 
 
 
 const LoginForm = () => {
+
+    const { theme, handleTheme } =useContext(ThemeContext)
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -73,13 +76,13 @@ const LoginForm = () => {
     };
 
     return (
-        <>
+        <div className="">
             {/* //Na linha seguinte deverá ser feito um teste se a aplicação
         // está em dark mode e deverá utilizar o css correto */}
             <div
-                className={`text-center card container ${styles.card}`}
+                className={theme === "light" ? `text-center card container ${styles.card}`: `text-center card container ${styles.CardDark}` }
             >
-                <div className={`card-body ${styles.CardBody}`}>
+                <div className={theme === "light" ? `card-body ${styles.CardBody}` : `card-body ${styles.CardDark}`}>
                     <form onSubmit={handleSubmit}>
                         <input
                             value={loginForm}
@@ -112,7 +115,7 @@ const LoginForm = () => {
                     </form>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

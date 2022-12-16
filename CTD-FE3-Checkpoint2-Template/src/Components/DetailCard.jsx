@@ -48,8 +48,6 @@ const DetailCard = () => {
   }, []);
 
 
-
-
   if (loading) {
     return <h1>...carregando página</h1>;
   }
@@ -94,7 +92,7 @@ const DetailCard = () => {
               <button
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModal"
-                className={`btn btn-light ${styles.button
+                className={`btn btn-${theme} ${styles.button
                   }`}
               >
                 Marcar consulta

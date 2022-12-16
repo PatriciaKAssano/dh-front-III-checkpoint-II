@@ -6,8 +6,9 @@
   height: calc(100vh -86px);
 }
 
-.cardDark{
-  background-color: #31313196;
+.CardDark{
+  background-color: #181818d5;
+  width: 100%;
 }
 
 .inputSpacing+.inputSpacing{
@@ -28,4 +29,8 @@
 .icon {
   padding: 0 10px;
   cursor: pointer;
+}
+
+.fundo{
+  background-color: #000000d5;
 }
