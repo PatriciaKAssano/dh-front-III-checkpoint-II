@@ -16,11 +16,9 @@ const Home = () => {
 
   }, []);
 
-{/* <div className={theme === "light" ? "bg_light" : "bg_dark"}></div> */}
-
   return (
-    <div className="">
-      <h1>Home</h1>
+    <div className={theme === "light" ? "light" : "dark"}>
+      <h1 >Home</h1>
       <div className="card-grid container">
         {dentists.map((dentist) =>(
           <Card dentist={dentist}/>

@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import api from "../Services/api";
 import { AuthContext } from "../Providers/AuthContext";
 import { useParams } from "react-router-dom";
-
+import { ThemeContext } from "../Providers/ThemeProvider";
 
 const DetailCard = () => {
 
@@ -16,7 +16,9 @@ const DetailCard = () => {
 
   const [dentistDetail, setDentistDetail] = useState([]);
 
-  const { id } = useParams();
+  const { theme, handleTheme } =useContext(ThemeContext)
+
+  const { id }= useParams();
 
   async function getDentistsDetails() {
     setLoading(true);

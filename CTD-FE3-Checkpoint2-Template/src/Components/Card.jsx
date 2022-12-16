@@ -1,9 +1,11 @@
 import styles from "./Card.module.css";
-import { Link } from "react-router-dom";
+import { ThemeContext } from "../Providers/ThemeProvider";
+import { useContext } from "react";
 
 const Card = (props) => {
 
   const {dentist}= props;
+  const { theme, handleTheme } =useContext(ThemeContext)
 
   return (
     <>
@@ -15,12 +17,12 @@ const Card = (props) => {
           src="/images/doctor.jpg"
           alt="doctor placeholder"
         />
-        <div className={`card-body ${styles.CardBody}`}>
+        <div className={theme === "light" ? `card-body ${styles.CardBody}` : `card-body ${styles.CardDark}`}>
           {/* Na linha seguinte o link deverá utilizar a matricula, nome e sobrenome do dentista
           que vem da API */}
           <a href={`/dentista/${dentist.matricula}`}>
             
-            <h5 className={`card-title ${styles.title}`}>{`${dentist.nome} ${dentist.sobrenome}`}</h5>
+            <h5 className={theme === "light" ? `card-title ${styles.title}` : `card-title ${styles.titleDark}`}>{`${dentist.nome} ${dentist.sobrenome}`}</h5>
           </a>
         </div>
       </div>

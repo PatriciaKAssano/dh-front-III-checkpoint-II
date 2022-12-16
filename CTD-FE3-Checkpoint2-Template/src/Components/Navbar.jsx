@@ -1,7 +1,14 @@
 import styles from "./Navbar.module.css";
 import React, {useContext} from 'react'
+import { ThemeContext } from "../Providers/ThemeProvider";
+import { useEffect } from "react";
+import { AuthContext } from "../Providers/AuthContext";
+
 
 const Navbar = () => {
+
+  const { theme, handleTheme } =useContext(ThemeContext)
+  const { isLogged } = useContext(AuthContext)
 
 
   return (
@@ -9,7 +16,7 @@ const Navbar = () => {
       {/* //Na linha seguinte deverá ser feito um teste se a aplicação
         // está em dark mode e deverá utilizar navbar-dark bg-dark ou navbar-light bg-light*/}
       <nav
-        className={`navbar navbar-expand-sm navbar-light bg-light`}
+        className={`navbar navbar-expand-sm navbar-${theme} bg-${theme}`}
         aria-label="Third navbar example"
       >
         <div className="container">
@@ -48,7 +55,7 @@ const Navbar = () => {
                 O botão de logout deverá ser testado darkmode
                 se sim, btn-dark, se não, btn-light */}
                 <a className="nav-link" href="/login">
-                  Login
+                  {isLogged ? 'Login' : 'Logout'}
                 </a>
               </li>
               <li className={`nav-item`}>
@@ -57,11 +64,11 @@ const Navbar = () => {
                  Na linha seguinte deverá ser feito um teste se a aplicação
                  está em dark mode e deverá utilizar o icone ☀ ou 🌙 e btn-dark ou btn-light*/}
                 <button
-                  className={`btn btn-light${styles.btnStyle
-                    }`}
-              
+                  className={`btn btn-${theme} ${styles.btnStyle }`}
+                  onClick={() => handleTheme()}
+                  
                 >
-                  ☀ 🌙{" "}
+                  {theme === 'light' ? '🌙' : '☀'}
                 </button>
               </li>
             </ul>

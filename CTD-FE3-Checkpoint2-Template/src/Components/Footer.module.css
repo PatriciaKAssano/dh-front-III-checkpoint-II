@@ -2,6 +2,11 @@
   margin-top: auto;
 }
 
+.footerWrapperDark {
+  margin-top: auto;
+  background-color: #212529;
+}
+
 .top {
   text-transform: uppercase;
   padding: 1rem;
