@@ -1,24 +1,55 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Providers/AuthContext";
+import { DentistContext } from "../Providers/DentistProvider";
 import styles from "./ScheduleForm.module.css";
+import api from "../Services/api";
 
 const ScheduleForm = () => {
 
+  const {loginData} = useContext(AuthContext)
+
   const { paciente, dentista } = useContext(AuthContext);
+
   // const { contextIsLight } = useContext(NavBarContext);
-  const { userData } = useContext(AuthContext);
 
+  const { dentists, error, setError, loading, setLoading, getDentists} = useContext(DentistContext)
+
+  const [patients, setPatients] = useState([]);
+
+
+//INPUTS FORM
   const [dentist, setDentist] = useState([]);
-  const [pacient, setPacient] = useState([]);
-
+  const [patient, setPatient] = useState([]);
   const [appointmentDate, setAppointmentDate] = useState("");
+
+
+  async function getPatients() {
+    setLoading(true);
+    try {
+      const response = await api.get("/paciente", {
+        headers:{
+          token: `${loginData.tipo} ${loginData.token}`
+        }
+
+      });
+
+      setPatients(response.data);
+    } catch (error) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     //Nesse useEffect, você vai fazer um fetch na api buscando TODOS os dentistas
     //e pacientes e carregar os dados em 2 estados diferentes
+    getDentists();
+    getPatients();
+    
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     //Nesse handlesubmit você deverá usar o preventDefault,
     event.preventDefault();
 
@@ -27,28 +58,28 @@ const ScheduleForm = () => {
     //lembre-se que essa rota precisa de um Bearer Token para funcionar.
     //Lembre-se de usar um alerta para dizer se foi bem sucedido ou ocorreu um erro
 
-    // const body = {
-    //   paciente: {
-    //     matricula: pacient,
-    //   },
-    //   dentista: {
-    //     matricula: dentist,
-    //   },
-    //   dataHoraAgendamento: appointmentDate,
-    // };
+    const body = {
+      paciente: {
+        matricula: patient,
+      },
+      dentista: {
+        matricula: dentist,
+      },
+      dataHoraAgendamento: appointmentDate,
+    };
 
-    // const headers = {
-    //   headers: {
-    //     Authorization: `Bearer ${userData.token}`,
-    //   },
-    // };
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${loginData.token}`,
+      },
+    };
 
-    // try {
-    //   await api.post("/consulta", body, headers);
-    //   alert("OK! Marcado!");
-    // } catch (error) {
-    //   alert("Erro " + error.response?.data || error);
-    // }
+    try {
+      await api.post("/consulta", body, headers);
+      alert("OK! Marcado!");
+    } catch (error) {
+      alert("Erro " + error.response?.data || error);
+    }
 
   };
 
@@ -90,8 +121,8 @@ const ScheduleForm = () => {
                 Paciente
               </label>
               <select 
-                value={pacient.matricula}
-                onChange={(event) => setPacient(event.target.value)}
+                value={patient.matricula}
+                onChange={(event) => setPatient(event.target.value)}
                 className="form-select" name="patient" id="patient"
               >
                 {/*Aqui deve ser feito um map para listar todos os pacientes*/}

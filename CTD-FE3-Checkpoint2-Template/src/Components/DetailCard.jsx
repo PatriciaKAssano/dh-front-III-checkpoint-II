@@ -4,26 +4,31 @@ import styles from "./DetailCard.module.css";
 import { DentistContext } from "../Providers/DentistProvider";
 import { useContext, useState } from "react";
 import api from "../Services/api";
+import { AuthContext } from "../Providers/AuthContext";
+import { useParams } from "react-router-dom";
 
 
 const DetailCard = () => {
+
+  const {loginData} = useContext(AuthContext)
 
   const { dentists, error, setError, loading, setLoading, getDentists} = useContext(DentistContext)
 
   const [dentistDetail, setDentistDetail] = useState([]);
 
+  const { id } = useParams();
 
   async function getDentistsDetails() {
     setLoading(true);
     try {
-      // const response = await api.get(`/dentista?matricula=${id}`,{
-      //   headers:{
-      //     token: `${}`
-      //   }
+      const response = await api.get(`/dentista?matricula=${id}`,{
+        headers:{
+          token: `${loginData.tipo} ${loginData.token}`
+        }
 
-      // })
+      })
 
-      // setDentistDetail(response.data)
+      setDentistDetail(response.data)
     } catch (error) {
       setError(true);
     } finally {
@@ -36,7 +41,7 @@ const DetailCard = () => {
     //Nesse useEffect, você vai fazer um fetch na api passando o 
     //id do dentista que está vindo do react-router e carregar os dados em algum estado
     getDentistsDetails()
-  
+    getDentists();
   
   }, []);
 
