@@ -5,7 +5,7 @@ import { DentistContext } from "../Providers/DentistProvider";
 
 const Home = () => {
 
-  const { dentists, error, setError, loading, setLoading, getDentists} = useContext(DentistContext)
+  const { dentists, getDentists} = useContext(DentistContext)
   const { theme, handleTheme } = useContext(ThemeContext);
 
   useEffect(() => {

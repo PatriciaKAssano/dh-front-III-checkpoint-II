@@ -11,12 +11,12 @@ const AppRoutes = () => {
 
     return (
         <BrowserRouter>
-        <AuthProvider>
-            <Routes>
-                <Route path="/home" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dentist/:registration" element={<Detail />} />     
-            </Routes>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dentist/:id" element={<Detail />} />     
+                </Routes>
             </AuthProvider>
         </BrowserRouter>
         

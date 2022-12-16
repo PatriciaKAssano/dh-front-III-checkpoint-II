@@ -1,4 +1,5 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 //import saveProduct from "../services/productService";
 
@@ -7,11 +8,14 @@ import api from "../Services/api";
 export const DentistContext = createContext({});
 
 const DentistProvider = ({ children }) => {
+
   const [dentists, setDentists] = useState([]);
 
   const [error, setError] = useState(false);
 
   const [loading, setLoading] = useState(false);
+
+  const {loginData} = useContext(AuthContext)
 
   async function getDentists() {
     setLoading(true);
