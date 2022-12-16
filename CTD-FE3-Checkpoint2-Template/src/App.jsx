@@ -1,18 +1,15 @@
 import Footer from "./Components/Footer";
 import Navbar from "./Components/Navbar";
 import DentistProvider from "./Providers/DentistProvider";
+import ThemeProvider from "./Providers/ThemeProvider";
 import AppRoutes from "./Routes";
+import { ThemeContext } from "./Providers/ThemeProvider";
+import { useContext} from "react";
 
 function App() {
 
-//   const [theme, setTheme] = useState(themes.light);
-//   const handleChangeTheme = () => {
-//     if (theme === themes.dark) setTheme(themes.light)
-//     if (theme === themes.light) setTheme(themes.dark)
-//  }
-//  const providerValue =  useMemo(()=>({theme, handleChangeTheme}),[theme,handleChangeTheme])
-//  <ThemeContext.Provider value={providerValue}>
-//  </ThemeContext.Provider>
+  const { theme, handleTheme } =useContext(ThemeContext)
+
 
 
   return (
@@ -21,13 +18,15 @@ function App() {
         // está em dark mode e deverá utilizar a classe dark ou light */}
     
       <DentistProvider>
-          <div className={`app light}`}>
+        <ThemeProvider>
+          <div className={`app ${theme}}`}>
             <Navbar />
             <main>
               <AppRoutes />
             </main>
             <Footer />
           </div>
+          </ThemeProvider>
       </DentistProvider>
     </>
   );
