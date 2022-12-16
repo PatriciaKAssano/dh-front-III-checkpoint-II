@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
     //    localStorage.removeItem("favorites");
     //    localStorage.removeItem("@theme");
     setIsLogged(false);
+    navigate('/login')
   }
 
 

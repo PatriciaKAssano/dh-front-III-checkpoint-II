@@ -1,14 +1,15 @@
 import styles from "./Navbar.module.css";
 import React, {useContext} from 'react'
 import { ThemeContext } from "../Providers/ThemeProvider";
-import { useEffect } from "react";
 import { AuthContext } from "../Providers/AuthContext";
 
 
 const Navbar = () => {
 
   const { theme, handleTheme } =useContext(ThemeContext)
-  const { isLogged } = useContext(AuthContext)
+  const { isLogged, removeLoginData } = useContext(AuthContext)
+ 
+
 
 
   return (
@@ -54,8 +55,8 @@ const Navbar = () => {
                 ao formulário de login
                 O botão de logout deverá ser testado darkmode
                 se sim, btn-dark, se não, btn-light */}
-                <a className="nav-link" href="/login">
-                  {isLogged ? 'Login' : 'Logout'}
+                <a className="nav-link" href="/login" onClick={removeLoginData}>
+                  {isLogged ? 'Logout' : 'Login' }
                 </a>
               </li>
               <li className={`nav-item`}>
