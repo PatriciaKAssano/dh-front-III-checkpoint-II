@@ -16,6 +16,7 @@ const AppRoutes = () => {
                     <Route path="/home" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/dentist/:id" element={<Detail />} />     
+                    <Route path="" element={<Home />} />     
                 </Routes>
             </AuthProvider>
         </BrowserRouter>
